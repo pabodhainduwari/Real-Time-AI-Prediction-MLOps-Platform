@@ -1,0 +1,18 @@
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      DATA_DIR: /opt/app/data
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-change-me-before-deployment}
+    volumes: ["modeldata:/opt/app/data"]
+    restart: unless-stopped
+  dashboard:
+    build: .
+    command: streamlit run dashboard/app.py --server.address 0.0.0.0 --server.port 8501
+    ports: ["8501:8501"]
+    environment:
+      API_URL: http://api:8000
+    depends_on: [api]
+volumes:
+  modeldata:

@@ -1,0 +1,14 @@
+flowchart LR
+ Client[Client] --> API[FastAPI Prediction API]
+ API --> Model[Versioned Random Forest Model]
+ API --> Logs[(Prediction History)]
+ Logs --> Drift[Drift Detector]
+ Data[(Labeled Training CSV)] --> Train[Training Pipeline]
+ Drift -. trigger on deployed scheduler .-> Train
+ Train --> Model
+ Train --> MLflow[MLflow Experiments]
+ API --> Metrics[Prometheus Metrics]
+ API --> Dashboard[Streamlit Dashboard]
+ GitHub[GitHub Push] --> CI[GitHub Actions CI]
+ CI --> Deploy[Optional SSH Deployment]
+ Deploy --> API
